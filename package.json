@@ -1,0 +1,47 @@
+{
+  "name": "grunt-rainmaker",
+  "description": "Interact with the RainmakerApp API",
+  "version": "0.1.0",
+  "homepage": "http://rainmaker.is",
+  "author": {
+    "name": "David Boskovic",
+    "email": "me@david.gs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:RainmakerApp/grunt-rainmaker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RainmakerApp/grunt-rainmaker.git/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/RainmakerApp/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.2",
+    "jade": "~0.35.0",
+    "restler": "~2.0.1",
+    "crypto": "0.0.3",
+    "marked": "~0.3.0",
+    "underscore": "~1.5.2"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.2"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
