@@ -13,28 +13,57 @@ module.exports = function (grunt) {
       rest    = require('restler'),
       jade    = require('jade'),
       _       = require('underscore'),
+      yaml    = require('js-yaml'),
       path    = require('path');
 
 
 
     var sendToRainmaker = function(f,source,options,ff,cb) {
+      var pattern;
       if(f.match(/.+\.jade/)) {
         source = (jade.compile(source, {filename:f.replace('.jade','.lhtml'),pretty:true}))({});
       }
-      ff = ff.replace('.html','.lhtml').replace('.jade','.lhtml');
+      // console.log(options)
+      if(options.local) {
+        options.domain = 'http://'+options.client+'.rainmaker.local'
+      }
+      // console.log(options)
+      if(ff.indexOf('patterns') === 0) {
+        // console.log(source)
+        pattern = yaml.load(source, 'utf8');
+        // console.log(options)
+        rest.post((options.domain || 'http://'+options.client+'.donate.io')+'/api/3.0/content-patterns', {
+          multipart: false,
+          username: options.key,
+          password: options.secret,
+          // username: 'live58',
+          // password: 'h1qr8nsm6X6xm2ZU575HbO6mDYBGDL',
+          data: {
+            'file': ff,
+            'config': (JSON.stringify(pattern))
+          }
+        }).on('complete', function(data) {
+          grunt.log.writeln('Pattern ' + ff.cyan + ' saved to server.');
+          // console.log(data)
+          cb(null,data);
+        });
 
-      rest.post((options.domain || 'http://'+options.client+'.donate.io')+'/apiv2/themes/'+options.theme+'/files?--suppress-content', {
-        multipart: false,
-        username: options.key,
-        password: options.secret,
-        data: {
-          'file': ff,
-          'content': new Buffer(source).toString('base64')
-        }
-      }).on('complete', function(data) {
-        grunt.log.writeln('Theme File ' + ff.cyan + ' sent to server.');
-        cb(null,data);
-      });
+      } else {
+        ff = ff.replace('.html','.lhtml').replace('.jade','.lhtml');
+
+        rest.post((options.domain || 'http://'+options.client+'.donate.io')+'/apiv2/themes/'+options.theme+'/files?--suppress-content', {
+          multipart: false,
+          username: options.key,
+          password: options.secret,
+          data: {
+            'file': ff,
+            'content': new Buffer(source).toString('base64')
+          }
+        }).on('complete', function(data) {
+          grunt.log.writeln('Theme File ' + ff.cyan + ' sent to server.');
+          cb(null,data);
+        });
+      }
     }
 
 
@@ -57,6 +86,7 @@ module.exports = function (grunt) {
       hashmap: '.hash',
       changes: '.cache/',
       key: false,
+      local: false,
       secret: false,
       client:false,
       theme:'default'
