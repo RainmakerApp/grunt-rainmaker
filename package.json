@@ -1,7 +1,7 @@
 {
   "name": "grunt-rainmaker",
   "description": "Interact with the RainmakerApp API",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "http://rainmaker.is",
   "author": {
     "name": "David Boskovic",
